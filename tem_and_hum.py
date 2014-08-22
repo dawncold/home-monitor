@@ -3,7 +3,7 @@
 
 import subprocess
 
-DHT_PROGRAM = 'Adafruit_DHT'
+DHT_PROGRAM_PATH = './Adafruit_DHT'
 GPIO_PIN = '4'
 DHT_MODEL = '11'
 
@@ -11,7 +11,7 @@ DHT_MODEL = '11'
 def read_from_dht():
     ret = None
     while 1:
-        ret = subprocess.Popen(['sudo', DHT_PROGRAM, DHT_MODEL, GPIO_PIN]).communicate()[0]
+        ret = subprocess.Popen(['sudo', DHT_PROGRAM_PATH, DHT_MODEL, GPIO_PIN]).communicate()[0]
         if ret:
             break
 
