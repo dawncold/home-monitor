@@ -4,8 +4,8 @@
 import subprocess
 
 DHT_PROGRAM = 'Adafruit_DHT'
-GPIO_PIN = 4
-DHT_MODEL = 11
+GPIO_PIN = '4'
+DHT_MODEL = '11'
 
 
 def read_from_dht():
