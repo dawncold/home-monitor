@@ -13,12 +13,13 @@ def read_from_dht():
     ret = None
     tried_count = 1
     while 1:
-        ret = subprocess.Popen(['sudo', DHT_PROGRAM_PATH, DHT_MODEL, GPIO_PIN]).communicate()[0]
+        ret = subprocess.check_output(['sudo', DHT_PROGRAM_PATH, DHT_MODEL, GPIO_PIN])
         if ret:
             break
         tried_count += 1
         if tried_count == MAX_TRIED_COUNT:
             break
+    return ret
 
 if __name__ == '__main__':
     print(read_from_dht())
