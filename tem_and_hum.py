@@ -34,8 +34,8 @@ def upload_tem_and_hum():
     try:
         tem, hum = read_from_dht().split(',')
     except ValueError:
-        print('can not read data from dht')
-        raise
+        print('can not read data from dht, waiting for next retrieve')
+        return
     timestamp = datetime.now().isoformat()
     headers = {
         'U-ApiKey': API_KEY
