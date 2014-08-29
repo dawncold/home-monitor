@@ -48,16 +48,28 @@ def upload_tem_and_hum():
         'timestamp': timestamp,
         'value': hum
     }
-    tem_response = requests.post(TEM_API_URL, data=json.dumps(tem_payload), headers=headers)
-    hum_response = requests.post(HUM_API_URL, data=json.dumps(hum_payload), headers=headers)
-    if tem_response.status_code == 200:
-        print('tem data upload successfully')
+    try:
+        tem_response = requests.post(TEM_API_URL, data=json.dumps(tem_payload), headers=headers)
+        hum_response = requests.post(HUM_API_URL, data=json.dumps(hum_payload), headers=headers)
+    except requests.ConnectionError:
+        print('connection error')
+    except requests.HTTPError:
+        print('invalid response')
+    except requests.Timeout:
+        print('timeout')
+    except requests.TooManyRedirects:
+        print('too many redirects')
+    except Exception:
+        print('other exception')
     else:
-        print(tem_response.raise_for_status())
-    if hum_response.status_code == 200:
-        print('hum data upload successfully')
-    else:
-        print(tem_response.raise_for_status())
+        if tem_response.status_code == 200:
+            print('tem data upload successfully')
+        else:
+            print(tem_response.raise_for_status())
+        if hum_response.status_code == 200:
+            print('hum data upload successfully')
+        else:
+            print(tem_response.raise_for_status())
 
 if __name__ == '__main__':
     while 1:
