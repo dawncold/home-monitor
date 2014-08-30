@@ -31,7 +31,7 @@ def detect_loop():
         if GPIO.input(GPIO_SOCKET_NUMBER):
             print('capture...')
             capture()
-        time.sleep(2)
+        time.sleep(0.5)
 
 
 def capture():
