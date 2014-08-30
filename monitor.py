@@ -31,7 +31,7 @@ def detect_loop():
         if GPIO.input(GPIO_SOCKET_NUMBER):
             print('capture...')
             capture()
-        time.sleep(0.5)
+        time.sleep(2)
 
 
 def capture():
@@ -40,6 +40,7 @@ def capture():
     except Exception:
         print('get image bytes failed')
     else:
+        print('generated image bytes')
         with tempfile.TemporaryFile(mode='wb+') as f:
             f.write(image_bytes)
             f.seek(0)
@@ -49,6 +50,7 @@ def capture():
                 except Exception:
                     print('upload failed, retry')
                 else:
+                    print('uploaded image')
                     break
 
 
