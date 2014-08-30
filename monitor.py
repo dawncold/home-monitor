@@ -45,7 +45,7 @@ def capture():
             f.seek(0)
             while 1:
                 try:
-                    local_ftp.upload(datetime.now().strftime(''), f)
+                    local_ftp.upload('{}.jpg'.format(datetime.now().isoformat()), f)
                 except Exception:
                     print('upload failed, retry')
                 else:
