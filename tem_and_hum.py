@@ -13,8 +13,20 @@ DHT_MODEL = '11'
 MAX_TRIED_COUNT = 3
 TEM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6194/datapoints'
 HUM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6195/datapoints'
-API_KEY = '6c5380ac5abd272614dfd77ace7b6139'
+API_KEY = None
+API_KEY_PATH = '~/.API_KEY'
 DATA_UPLOAD_SECONDS_INTERVAL = 20
+
+
+def get_api_key():
+    global API_KEY
+    if not API_KEY:
+        try:
+            API_KEY = open(API_KEY_PATH).read().strip()
+        except IOError:
+            print('can not read API KEY from file, please check the file is here')
+            exit(-1)
+    return API_KEY
 
 
 def read_from_dht():
@@ -72,6 +84,7 @@ def upload_tem_and_hum():
             print(tem_response.raise_for_status())
 
 if __name__ == '__main__':
+    API_KEY = get_api_key()
     while 1:
         upload_tem_and_hum()
         time.sleep(DATA_UPLOAD_SECONDS_INTERVAL)
