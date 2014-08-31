@@ -14,7 +14,7 @@ MAX_TRIED_COUNT = 3
 TEM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6194/datapoints'
 HUM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6195/datapoints'
 API_KEY = None
-API_KEY_PATH = '~/.API_KEY'
+API_KEY_PATH = '/home/pi/.API_KEY'
 DATA_UPLOAD_SECONDS_INTERVAL = 20
 
 
