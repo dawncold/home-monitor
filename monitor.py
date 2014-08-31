@@ -19,8 +19,8 @@ def get_image_bytes():
 
 def install():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(GPIO_SOCKET_NUMBER, GPIO.IN)
-    GPIO.add_event_detect(GPIO_SOCKET_NUMBER, GPIO.RISING, callback=capture, bouncetime=1000)
+    GPIO.setup(GPIO_SOCKET_NUMBER, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.add_event_detect(GPIO_SOCKET_NUMBER, GPIO.RISING, bouncetime=1000)
 
 
 def uninstall():
@@ -30,9 +30,9 @@ def uninstall():
 
 def detect_loop():
     while 1:
-        if GPIO.input(GPIO_SOCKET_NUMBER):
+        if GPIO.event_detected(GPIO_SOCKET_NUMBER):
             capture()
-        time.sleep(2)
+        time.sleep(1)
 
 
 def capture():
@@ -66,8 +66,8 @@ if __name__ == '__main__':
         except Exception:
             print('uninstall GPIO failed')
         sys.exit(-1)
-    # else:
-    #     try:
-    #         detect_loop()
-    #     except Exception:
-    #         uninstall()
+    else:
+        try:
+            detect_loop()
+        except Exception:
+            uninstall()
