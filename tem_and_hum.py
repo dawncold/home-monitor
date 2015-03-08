@@ -8,7 +8,7 @@ import json
 import requests
 
 DHT_PROGRAM_PATH = './Adafruit_DHT'
-GPIO_PIN = '8'
+GPIO_PIN = '4'
 DHT_MODEL = '11'
 MAX_TRIED_COUNT = 3
 TEM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6194/datapoints'
