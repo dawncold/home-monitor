@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 import json
 import requests
+import influxdb
 
 DHT_PROGRAM_PATH = './Adafruit_DHT'
 GPIO_PIN = '4'
@@ -16,6 +17,12 @@ HUM_API_URL = 'http://api.yeelink.net/v1.0/device/4315/sensor/6195/datapoints'
 API_KEY = None
 API_KEY_PATH = '/home/pi/.API_KEY'
 DATA_UPLOAD_SECONDS_INTERVAL = 20
+
+INFLUXDB_HOST = 'linode.youth2009.org'
+INFLUXDB_PORT = 8086
+INFLUXDB_USERNAME = 'root'
+INFLUXDB_PASSWORD = 'goVeil2011!'
+INFLUXDB_NAME = 'rasp'
 
 
 def get_api_key():
@@ -82,6 +89,24 @@ def upload_tem_and_hum():
             print('hum data upload successfully')
         else:
             print(tem_response.raise_for_status())
+
+    try:
+        update_influxdb(hum, tem)
+    except Exception as e:
+        print('failed update influxdb: {}'.format(e.message))
+
+
+def update_influxdb(hum, tem):
+    client = influxdb.InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME,
+                                     password=INFLUXDB_PASSWORD, database=INFLUXDB_NAME)
+    data = [{
+        'points': [
+            [tem, hum]
+        ],
+        'name': 'DHT11',
+        'columns': ['tem', 'hum']
+    }]
+    client.write_points(data)
 
 if __name__ == '__main__':
     API_KEY = get_api_key()
