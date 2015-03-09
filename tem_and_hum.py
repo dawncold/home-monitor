@@ -55,6 +55,7 @@ def upload_tem_and_hum():
     except ValueError:
         print('can not read data from dht, waiting for next retrieve')
         return
+    tem, hum = int(tem), int(hum)
     timestamp = datetime.now().isoformat()
     headers = {
         'U-ApiKey': API_KEY
