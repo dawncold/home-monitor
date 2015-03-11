@@ -18,11 +18,8 @@ API_KEY = None
 API_KEY_PATH = '/home/pi/.API_KEY'
 DATA_UPLOAD_SECONDS_INTERVAL = 20
 
-INFLUXDB_HOST = 'linode.youth2009.org'
-INFLUXDB_PORT = 8086
-INFLUXDB_USERNAME = 'root'
-INFLUXDB_PASSWORD = 'goVeil2011!'
-INFLUXDB_NAME = 'rasp'
+influxdb_config = None
+influxdb_config_path = '/home/pi/.INFLUXDB_CONFIG'
 
 
 def get_api_key():
@@ -94,8 +91,11 @@ def upload_tem_and_hum():
 
 
 def update_influxdb(hum, tem):
-    client = influxdb.InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME,
-                                     password=INFLUXDB_PASSWORD, database=INFLUXDB_NAME)
+    global influxdb_config
+    global influxdb_config_path
+    if not influxdb_config:
+        influxdb_config = get_influxdb_config(influxdb_config_path)
+    client = influxdb.InfluxDBClient(**influxdb_config)
     data = [{
         'points': [
             [tem, hum]
@@ -105,8 +105,22 @@ def update_influxdb(hum, tem):
     }]
     client.write_points(data)
 
+
+def get_influxdb_config(path):
+    config = {}
+    with open(path) as f:
+        lines = f.readlines()
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        k, v = line.split('=')
+        config[k] = v
+    return config
+
 if __name__ == '__main__':
     API_KEY = get_api_key()
+    influxdb_config = get_influxdb_config(influxdb_config_path)
     while 1:
         upload_tem_and_hum()
         time.sleep(DATA_UPLOAD_SECONDS_INTERVAL)
