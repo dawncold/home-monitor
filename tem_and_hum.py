@@ -71,25 +71,21 @@ def upload_tem_and_hum():
     try:
         tem_response = requests.post(TEM_API_URL, data=json.dumps(tem_payload), headers=headers)
         hum_response = requests.post(HUM_API_URL, data=json.dumps(hum_payload), headers=headers)
+        tem_response.raise_for_status()
+        hum_response.raise_for_status()
     except requests.ConnectionError:
         print('connection error')
-    except requests.HTTPError:
-        print('invalid response')
+    except requests.HTTPError as e:
+        print('invalid response: {}'.format(e.message))
     except requests.Timeout:
         print('timeout')
     except requests.TooManyRedirects:
         print('too many redirects')
-    except Exception:
-        print('other exception')
+    except Exception as e:
+        print('other exception: {}'.format(e.message))
     else:
-        if tem_response.status_code == 200:
-            print('tem data upload successfully')
-        else:
-            print(tem_response.raise_for_status())
-        if hum_response.status_code == 200:
-            print('hum data upload successfully')
-        else:
-            print(tem_response.raise_for_status())
+        print('tem data upload successfully')
+        print('hum data upload successfully')
 
     try:
         update_influxdb(hum, tem)
